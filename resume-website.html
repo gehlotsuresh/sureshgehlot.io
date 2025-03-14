@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suresh Gehlot | Digital Resume</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --terminal-green: #00FF41;
+            --terminal-dark-green: #008F11;
+            --terminal-black: #0A0A0A;
+            --terminal-gray: #333333;
+            --error-red: #FF004D;
+            --highlight: #39FF14;
+            --scanline-opacity: 0.15;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background-color: var(--terminal-black);
+            color: var(--terminal-green);
+            line-height: 1.6;
+            padding: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, var(--scanline-opacity)),
+                rgba(0, 0, 0, var(--scanline-opacity)) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .crt-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                ellipse at center,
+                transparent 0%,
+                rgba(10, 10, 10, 0.2) 90%,
+                rgba(10, 10, 10, 0.4) 100%
+            );
+            pointer-events: none;
+            z-index: 99;
+        }
+
+        .cyber-terminal {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto 1fr;
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .cyber-terminal {
+                grid-template-columns: 250px 1fr;
+                grid-template-rows: 1fr;
+                padding: 1.5rem;
+            }
+        }
+
+        header {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--terminal-dark-green);
+        }
+
+        @media (min-width: 768px) {
+            header {
+                border-bottom: none;
+                border-right: 1px solid var(--terminal-dark-green);
+                padding-right: 1.5rem;
+            }
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--highlight);
+            text-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed var(--terminal-dark-green);
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        .dos-prompt {
+            margin-top: 2rem;
+        }
+
+        .dos-prompt a, .dos-prompt .menu-item {
+            display: block;
+            padding: 0.5rem 0;
+            color: var(--terminal-green);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .dos-prompt a:hover, .dos-prompt .menu-item:hover {
+            color: var(--highlight);
+            transform: translateX(10px);
+        }
+
+        .dos-prompt a:before, .dos-prompt .menu-item:before {
+            content: "[+]";
+            margin-right: 0.5rem;
+            display: inline-block;
+        }
+
+        .dos-prompt a:hover:before, .dos-prompt .menu-item:hover:before {
+            content: "[>]";
+        }
+
+        .output-window {
+            overflow-y: auto;
+            padding: 1rem 0 0 0;
+        }
+
+        @media (min-width: 768px) {
+            .output-window {
+                padding: 0 0 0 2rem;
+            }
+        }
+
+        .content-section {
+            padding: 1rem 0;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .blinking-cursor:after {
+            content: "█";
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .timeline {
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .timeline:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1px;
+            height: 100%;
+            background-color: var(--terminal-dark-green);
+        }
+
+        .timeline-item {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .timeline-item:before {
+            content: ">";
+            position: absolute;
+            left: -1px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background-color: var(--terminal-black);
+            color: var(--terminal-green);
+            text-align: center;
+            line-height: 20px;
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: var(--highlight);
+        }
+
+        .timeline-title {
+            margin: 0.25rem 0;
+        }
+
+        .timeline-org {
+            font-style: italic;
+        }
+
+        .timeline-desc {
+            margin-top: 0.5rem;
+        }
+
+        .course-card {
+            border: 1px solid var(--terminal-dark-green);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: rgba(0, 50, 0, 0.2);
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.1);
+        }
+
+        .course-card:hover {
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        .hidden-message {
+            color: rgba(0, 255, 65, 0.05);
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 0.7rem;
+            user-select: none;
+        }
+
+        .hidden-message:hover {
+            color: var(--highlight);
+        }
+
+        footer {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--terminal-dark-green);
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background-color: white;
+                color: black;
+            }
+            
+            .scanlines, .crt-effect {
+                display: none;
+            }
+            
+            .cyber-terminal {
+                display: block;
+            }
+            
+            header {
+                border: none;
+                padding: 0;
+            }
+            
+            .dos-prompt {
+                display: none;
+            }
+            
+            .output-window {
+                padding: 0;
+            }
+            
+            h1, h2, h3, h4 {
+                color: black;
+                text-shadow: none;
+            }
+            
+            a {
+                color: black;
+                text-decoration: underline;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    <div class="crt-effect"></div>
+    
+    <main class="cyber-terminal">
+        <header>
+            <h1 class="blinking-cursor">~/suresh_gehlot/resume</h1>
+            <nav class="dos-prompt">
+                <div class="menu-item" onclick="showSection('bio')">BIOGRAPHY</div>
+                <div class="menu-item" onclick="showSection('education')">EDUCATION</div>
+                <div class="menu-item" onclick="showSection('experience')">EXPERIENCE</div>
+                <div class="menu-item" onclick="showSection('skills')">SKILLS</div>
+                <div class="menu-item" onclick="showSection('certifications')">CERTIFICATIONS</div>
+                <div class="menu-item" onclick="showSection('contact')">CONTACT</div>
+            </nav>
+            <span class="hidden-message">cat ~/.secret</span>
+        </header>
+        
+        <div class="output-window">
+            <section id="bio" class="content-section">
+                <h2>> user profile</h2>
+                <p>Law student with expertise in technology, finance, and regulatory frameworks. Incoming Associate at Cyril Amarchand Mangaldas from July 2025. Experience spanning judicial internships, legal research, and AI/LLM applications in law.</p>
+            </section>
+            
+            <section id="education" class="content-section" style="display: none;">
+                <h2>> formal education</h2>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2022-2025</div>
+                        <h3 class="timeline-title">LL.B. (Hons.)</h3>
+                        <div class="timeline-org">National Law School of India University (NLSIU), Bengaluru</div>
+                        <div class="timeline-desc">
+                            <ul>
+                                <li>JSW NUS Summer School, Paro, Bhutan</li>
+                                <li>Comparative Corporate Law by Umakanth Varottil</li>
+                                <li>Comparative Criminal Law by Mrinal Satish</li>
+                                <li>Received partial scholarship award of 35,000 Ngultrum</li>
+                                <li>NLSIU-Harvard Law School: IP Specialization: CopyrightX and PatentX</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">2021-2022</div>
+                        <h3 class="timeline-title">Master of Arts in International Studies (GPA: 3.555/4)</h3>
+                        <div class="timeline-org">Christ University, Bengaluru</div>
+                        <div class="timeline-desc">
+                            <p>Completed first year before transferring to law program</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">2017-2020</div>
+                        <h3 class="timeline-title">B.A. (Hons.) Political Science (CGPA: 7.554/10)</h3>
+                        <div class="timeline-org">Hindu College, University of Delhi</div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">2016-2017</div>
+                        <h3 class="timeline-title">Class 12 (98.2%)</h3>
+                        <div class="timeline-org">Master Minds Junior College, Guntur</div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">2014-2015</div>
+                        <h3 class="timeline-title">Class 10 (10 CGPA)</h3>
+                        <div class="timeline-org">Bhashyam Blooms, Guntur</div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="experience" class="content-section" style="display: none;">
+                <h2>> work_experience</h2>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">Jul 2025 (Upcoming)</div>
+                        <h3 class="timeline-title">Incoming Associate</h3>
+                        <div class="timeline-org">Cyril Amarchand Mangaldas, Bengaluru</div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">Apr 2024</div>
+                        <h3 class="timeline-title">TMT Intern</h3>
+                        <div class="timeline-org">Trilegal, Bengaluru</div>
+                        <div class="timeline-desc">
+                            <ul>
+                                <li>Led the TMT Legal Tracker project</li>
+                                <li>Prepared research notes on EU Digital Markets Act & Digital Competition Bill</li>
+                                <li>Analyzed cases related to cryptocurrency and developed compliance checklists</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">Feb 2024</div>
+                        <h3 class="timeline-title">Intern</h3>
+                        <div class="timeline-org">Finsec Law Advisors, Mumbai</div>
+                        <div class="timeline-desc">
+                            <ul>
+                                <li>Prepared notes on Family Offices in GIFT City, Front Running, and roles of stockbrokers/investment advisors</li>
+                                <li>Ensured compliance with RBI and FEMA regulations</li>
+                                <li>Researched SEBI LODR regulations, ICDR regulations, and Companies Act 2013</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">Jan 2024</div>
+                        <h3 class="timeline-title">Research Intern</h3>
+                        <div class="timeline-org">Meta Inc. & NLSIU & Ministry of Consumer Affairs</div>
+                        <div class="timeline-desc">
+                            <ul>
+                                <li>Collaborated on transforming India's consumer grievance redressal with GenAI</li>
+                                <li>Built data corpus to train LLMs for AI-powered chatbot development</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">Nov 2023 - Feb 2024</div>
+                        <h3 class="timeline-title">Intern</h3>
+                        <div class="timeline-org">Neural Learning Solutions, Bengaluru</div>
+                        <div class="timeline-desc">
+                            <ul>
+                                <li>Drafted End User License Agreement</li>
+                                <li>Registered private corporation with Startup India Foundation</li>
+                                <li>Conducted compliance and market analysis research</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">Oct 2023</div>
+                        <h3 class="timeline-title">Judicial Intern</h3>
+                        <div class="timeline-org">Supreme Court of India, Delhi</div>
+                        <div class="timeline-desc">
+                            <ul>
+                                <li>Worked in the Office of Justice Hrishikesh Roy</li>
+                                <li>Prepared briefs for Special Leave Petitions, Statutory Appeals, and Writ Petitions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="skills" class="content-section" style="display: none;">
+                <h2>> skillset</h2>
+                
+                <h3>Languages</h3>
+                <p>Fluent in English, Hindi, Telugu; Basic knowledge of Mandarin</p>
+                
+                <h3>Technical Skills</h3>
+                <ul>
+                    <li>Legal Research and Analysis</li>
+                    <li>Web Design (Hugo, HTML)</li>
+                    <li>Programming Fundamentals (Stanford Code in Place)</li>
+                    <li>AI/LLM Applications in Legal Domain</li>
+                </ul>
+                
+                <h3>Legal Expertise</h3>
+                <ul>
+                    <li>Technology, Media, and Telecommunications Law</li>
+                    <li>Securities and Financial Regulations</li>
+                    <li>Intellectual Property (Copyright, Patent)</li>
+                    <li>Consumer Protection Frameworks</li>
+                </ul>
+            </section>
+            
+            <section id="certifications" class="content-section" style="display: none;">
+                <h2>> certifications</h2>
+                
+                <div class="course-cards">
+                    <div class="course-card">
+                        <h3>CopyrightX</h3>
+                        <p>Harvard Law School</p>
+                        <p>Taught by Prof. William Fisher, Prof. Ruth Okediji (HLS) and Dr Arul George Scaria (NLSIU)</p>
+                    </div>
+                    
+                    <div class="course-card">
+                        <h3>PatentX</h3>
+                        <p>WIPO & Harvard Law School</p>
+                        <p>Patent law course taught by Prof. William Fisher (May 2024)</p>
+                    </div>
+                    
+                    <div class="course-card">
+                        <h3>Code in Place</h3>
+                        <p>Stanford University CS106</p>
+                        <p>Computer programming course by Prof. Chris Piech (Apr 2023)</p>
+                        <p>Selected from 75,000 applicants</p>
+                    </div>
+                    
+                    <div class="course-card">
+                        <h3>Certified Legal Researcher</h3>
+                        <p>Manupatra</p>
+                    </div>
+                    
+                    <div class="course-card">
+                        <h3>Strategic South Asia</h3>
+                        <p>Stimson Center</p>
+                        <p>Insights into regional geopolitical issues and legal ramifications</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="contact" class="content-section" style="display: none;">
+                <h2>> contact_info</h2>
+                
+                <div class="terminal-output">
+                    <p>$ <span class="blinking-cursor">curl -X GET https://api.example.dev/contact</span></p>
+                    <pre>{
+  "email": "contact@example.com",
+  "phone": "XXX-XXX-XXXX",
+  "location": "Bengaluru, India",
+  "linkedin": "sureshgehlot",
+  "message": "Currently preparing to join Cyril Amarchand Mangaldas as Associate in July 2025"
+}</pre>
+                </div>
+                
+                <div class="terminal-output" style="margin-top: 2rem;">
+                    <p>$ <span class="blinking-cursor">echo "Thanks for viewing my profile!"</span></p>
+                </div>
+            </section>
+            
+            <footer>
+                <p>© 2025 Suresh Gehlot • Built with &lt;/&gt; and ☕</p>
+            </footer>
+        </div>
+    </main>
+    
+    <script>
+        // Show default section on load
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('bio');
+        });
+        
+        // Section switcher
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+            
+            // Add typewriter effect for terminal-like feel
+            if (targetSection) {
+                const paragraphs = targetSection.querySelectorAll('p');
+                paragraphs.forEach((p, index) => {
+                    // Skip animation for certain sections
+                    if (sectionId === 'contact' && index < 2) return;
+                    
+                    // Store original text
+                    const originalText = p.textContent;
+                    p.textContent = '';
+                    
+                    // Animate text
+                    let charIndex = 0;
+                    const typeInterval = setInterval(() => {
+                        if (charIndex < originalText.length) {
+                            p.textContent += originalText.charAt(charIndex);
+                            charIndex++;
+                        } else {
+                            clearInterval(typeInterval);
+                        }
+                    }, 10);
+                });
+            }
+        }
+        
+        // Easter egg
+        document.querySelector('.hidden-message').addEventListener('click', () => {
+            console.log('🌐 Accessing hidden terminal...');
+            alert('Easter egg activated! Welcome to the secret terminal. Remember: The cake is a lie, but the opportunities are real.');
+        });
+    </script>
+</body>
+</html>
